@@ -2,11 +2,9 @@
 
 abstract class XXX_UIHelpers
 {
-	public static function parseNativeExclusiveOptionListBoxInput ($name = '', $options = array(), $defaultIndex = 0)
+	public static function parseNativeExclusiveOptionListBoxInput ($options = array(), $selectedOptionValue = '', $valueKey = false)
 	{
 		$result = false;
-		
-		$inputValue = XXX_HTTPServer_Client_Input::getBodyVariable($name);
 		
 		$foundValue = false;
 		
@@ -21,20 +19,30 @@ abstract class XXX_UIHelpers
 			{
 				$value = $option;
 			}
-			else if ($option['value'] != '')
+			else
 			{
-				$value = $option['value'];
+				if ($valueKey)
+				{
+					$value = $option[$valueKey];
+				}
+				else
+				{
+					if ($option['value'] != '')
+					{
+						$value = $option['value'];
+					}
+					else if ($option['ID'] != '')
+					{
+						$value = $option['ID'];
+					}
+					else if ($option['code'] != '')
+					{
+						$value = $option['code'];
+					}
+				}
 			}
-			else if ($option['ID'] != '')
-			{
-				$value = $option['ID'];
-			}
-			else if ($option['code'] != '')
-			{
-				$value = $option['code'];
-			}
-						
-			if ($value == $inputValue)
+			
+			if ($value == $selectedOptionValue)
 			{
 				$result = $option;
 				
@@ -55,7 +63,7 @@ abstract class XXX_UIHelpers
 		return $result;
 	}
 	
-	public static function composeNativeExclusiveOptionListBoxInput ($ID = '', $name = '', $options = array(), $selectedOptionValue = '')
+	public static function composeNativeExclusiveOptionListBoxInput ($ID = '', $name = '', $options = array(), $selectedOptionValue = '', $valueKey = false, $labelKey = false)
 	{
 		if ($name == '')
 		{
@@ -77,34 +85,50 @@ abstract class XXX_UIHelpers
 			{
 				$value = $option;
 			}
-			else if ($option['value'] != '')
+			else
 			{
-				$value = $option['value'];
+				if ($valueKey)
+				{
+					$value = $option[$valueKey];
+				}
+				else
+				{
+				 	if ($option['value'] != '')
+					{
+						$value = $option['value'];
+					}
+					else if ($option['ID'] != '')
+					{
+						$value = $option['ID'];
+					}
+					else if ($option['code'] != '')
+					{
+						$value = $option['code'];
+					}
+				}
 			}
-			else if ($option['ID'] != '')
-			{
-				$value = $option['ID'];
-			}
-			else if ($option['code'] != '')
-			{
-				$value = $option['code'];
-			}
-			
 			
 			$selected = false;
 			if (XXX_Type::isArray($option))
 			{
-				if ($option['value'] != '')
+				if ($valueKey)
 				{
-					$selected = $selectedOptionValue == $option['value'];
+					$selected = $selectedOptionValue == $option[$valueKey];
 				}
-				if ($option['ID'] != '')
+				else
 				{
-					$selected = $selectedOptionValue == $option['ID'];
-				}
-				if ($option['code'] != '')
-				{
-					$selected = $selectedOptionValue == $option['code'];
+					if ($option['value'] != '')
+					{
+						$selected = $selectedOptionValue == $option['value'];
+					}
+					if ($option['ID'] != '')
+					{
+						$selected = $selectedOptionValue == $option['ID'];
+					}
+					if ($option['code'] != '')
+					{
+						$selected = $selectedOptionValue == $option['code'];
+					}
 				}
 			}
 			else if ($option == $selectedOptionValue)
@@ -117,17 +141,27 @@ abstract class XXX_UIHelpers
 			{
 				$label = $option;
 			}
-			else if ($option['label'] != '')
+			else
 			{
-				$label = $option['label'];
-			}
-			else if ($option['name'] != '')
-			{
-				$label = $option['name'];
-			}
-			else if ($option['code'] != '')
-			{
-				$label = $option['code'];
+				if ($labelKey)
+				{
+					$label = $option[$labelKey];
+				}
+				else
+				{
+					if ($option['label'] != '')
+					{
+						$label = $option['label'];
+					}
+					else if ($option['name'] != '')
+					{
+						$label = $option['name'];
+					}
+					else if ($option['code'] != '')
+					{
+						$label = $option['code'];
+					}
+				}
 			}
 			
 			$result .= '<option';

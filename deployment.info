@@ -1,0 +1,6 @@
+project:XXX_UIHelpers_PHP
+deployEnvironment:development
+checkout:master
+commitHash:128fca86a1207e19ea6de9a9ccf155f7e878776e
+timestamp:2015-04-13T09:46:20Z
+deployer:operations
